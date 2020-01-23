@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Timer</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="app">
+		<div class="timer">
+			<div class="timer-display">
+				<p class="timer-main" id="timer-main" title="To next">Main timer</p>
+				<p class="timer-sub" id="timer-sub" title="To end">Timer to end</p>
+			</div>
+			<div class="timer-controls">
+				<button id="start">Start</button>
+				<button id="stop">Stop</button>
+				<button id="pause">Pause</button>
+				<button id="clear">Clear</button>
+				<label>Loop:</label>
+				<input type="checkbox" title="Loop" id="loop">
+				<!-- <label>Timer/Time:</label>
+				<input type="checkbox" title="Mode" id="mode"> -->
+			</div>
+			<div class="timer-list sort-vertical" id="timer-list"></div>
+			<button class="row-add">+</button>
+		</div>
+		<div class="theme">
+			<p class="theme-title" id="theme-title">Light</p>
+			<div class="theme-switch" id="theme-switch">
+				<div class="theme-pill"></div>
+			</div>
+		</div>
+	</div>
+	<template id="rowTemplate">
+		<div class="timer-row">
+			<input type="checkbox" class="row-ignore" title="Ignore">
+			<div class="row-handle">↕</div>
+			<button class="row-go">Go</button>
+			<input type="text" class="row-label" placeholder="Label">
+			<!-- <input type="date" class="row-date" title="date"> -->
+			<input type="number" min="0" class="row-hours" placeholder="h" title="hours">
+			<input type="number" min="0" class="row-minutes" placeholder="m" title="Minutes">
+			<input type="number" min="0" class="row-seconds" placeholder="s" title="Seconds">
+			<label>Time:</label>
+			<input type="checkbox" class="row-mode" title="Duration/Time mode">
+			<!-- <p class="row-timer">0:00:00</p> -->
+			<p class="row-timer">00</p>
+			<button class="row-remove">x</button>
+		</div>
+	</template>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+	<script src="script.js"></script>
+</body>
+
+</html>
