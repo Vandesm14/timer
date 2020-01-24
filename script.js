@@ -5,11 +5,10 @@ var startTime;
 var row = 0;
 
 var force = 0;
-var pause = false;
-var pauseTime;
+var pauseTime = false;
 var loop = false;
-var ignore = [];
 var display = false;
+var edit = true;
 
 var interval;
 
@@ -22,6 +21,10 @@ var D = H*24;
 $(document).ready(function () {
 	calcListeners();
 	clearTimer();
+
+	// setInterval(function(){
+	// 	$('#timer-time').text(new Date().toLocaleTimeString());
+	// }, 1000);
 
 	$('.row-add').on('click', function () {
 		let template = $('#rowTemplate').html();
@@ -39,13 +42,25 @@ $(document).ready(function () {
 		pauseTimer();
 	});
 	$('#clear').on('click', function () {
-		clearTimer();
+		if (confirm('Are you sure you want to clear the timer?')) {
+			clearTimer();
+		}
 	});
 	$('#loop').on('change', function () {
 		loop = $(this).prop('checked');
 	});
-	$('#mode').on('change', function () {
+	$('#displayMode').on('change', function () {
 		display = $(this).prop('checked');
+	});
+	$('#editMode').on('click', function () {
+		edit = !edit;
+		if (edit) {
+			$(this).text('Edit 📝');
+			$('#timer-list').removeClass('play');
+		} else {
+			$(this).text('Play ▶');
+			$('#timer-list').addClass('play');
+		}
 	});
 
 	$('#theme-switch').on('click', function () {
@@ -117,7 +132,11 @@ function calcTimer() {
 
 function runTimer() {
 	stopTimer(false);
-	startTime = new Date();
+	if (pauseTime) {
+		startTime = new Date(new Date() - (pauseTime - startTime));
+	} else {
+		startTime = new Date();
+	}
 	updateTimer();
 	checkTimer();
 	interval = setInterval(checkTimer, 1000);
@@ -125,19 +144,16 @@ function runTimer() {
 
 function updateTimer() {
 	let slice = timer.slice(force);
-	if (pause) {
-		startTime = new Date(startTime - (startTime - pauseTime));
-	}
+	pauseTime = false;
 	for (let i in slice) {
 		let lastTime = +i ? slice[i - 1].date : startTime;
 		let obj = slice[i];
-		// lastTime = new Date(lastTime);
 		if (obj.mode) { // true: time, false: duration
 			obj.date = new Date(lastTime);
 			obj.date.setHours(obj.h, obj.m, obj.s, 0);
-			if (obj.date < startTime) {
-				obj.date.setTime(obj.date.getTime() + D);
-			}
+			// if (obj.date < startTime) {
+			// 	obj.date.setTime(obj.date.getTime() + D);
+			// }
 		} else {
 			obj.date = new Date(lastTime);
 			obj.date.setTime(obj.date.getTime() + hms(obj.h, obj.m, obj.s));
@@ -147,7 +163,6 @@ function updateTimer() {
 		}
 	}
 	times = slice.map(el => el.date);
-	// times = times.map((el, i) => timer[i].ignore ? new Date(0) : el);
 }
 
 function checkTimer() {
@@ -162,6 +177,7 @@ function checkTimer() {
 		}
 	}
 	if (typeof row === 'number') { // true: normal, false: overtime
+		$('#timer-time').text(new Date().toLocaleTimeString());
 		if (display) {
 			$('#timer-main').text(new Date(times[row]).toLocaleTimeString() + ' - ' + format(times[row] - now));
 			$('#timer-sub').text(new Date(times[times.length - 1]).toLocaleTimeString() + ' - ' + format(times[times.length - 1] - now));
@@ -175,13 +191,16 @@ function checkTimer() {
 			$('.done').removeClass('done');
 		}
 		for (let i = 0; i < row + force; i++) {
-			$('.timer-row').eq(i).find('.row-timer').text('00');
 			$('.timer-row').eq(i).addClass('done');
 		}
+		$('.timer-row.done').find('.row-timer').text('00');
 		$('.row-ignore:checked').closest('.timer-row').addClass('done');
-		// $('.timer-row').eq(row + force).find('.row-timer').text(format(times[row] - now));
 		$('.timer-row').slice(force + row).each(function(i){
-			$(this).not('.done').find('.row-timer').text(format(times[i + row] - now));
+			if (display) {
+				$(this).not('.done').find('.row-timer').text(timer[i + row].date.toLocaleTimeString());
+			} else {
+				$(this).not('.done').find('.row-timer').text(format(times[i + row] - now));
+			}
 		});
 		$('.timer-row').eq(row + force).removeClass('done');
 		$('.timer-row').eq(row + force).addClass('highlight');
@@ -198,20 +217,19 @@ function stopTimer(full = true) {
 	clearInterval(interval);
 	$('.highlight').removeClass('highlight');
 	$('.done').removeClass('done');
-	// $('.row-timer').text('0:00:00');
 	$('.row-timer').text('00');
+	$('#timer-time').text('Time');
 	$('#timer-main').text('Main timer');
 	$('#timer-sub').text('Timer to end');
 	$('title').text('Timer');
 	if (full) {
 		force = 0;
-		pause = false;
+		pauseTime = false;
 	}
 }
 
 function pauseTimer() {
 	clearInterval(interval);
-	pause = true;
 	pauseTime = new Date();
 }
 
@@ -228,7 +246,8 @@ function createSortable(el) {
 		group: 'pile',
 		animation: 150,
 		handle: '.row-handle',
-		invertSwap: true
+		invertSwap: true,
+		onEnd: calcTimer
 	});
 }
 
@@ -238,7 +257,7 @@ function format(time) {
 	let s = Math.round(time / S) % 60;
 	s = s < 10 ? '0' + s : s;
 	m = m < 10 ? '0' + m : m;
-	return (+h ? h + ':' : '') + (+m ? m + ':' : '') + (s + '');
+	return (+h ? h + ':' : '') + (+m || +h ? m + ':' : '') + s;
 }
 
 function hms(h, m, s) {

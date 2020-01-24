@@ -12,6 +12,7 @@
 	<div class="app">
 		<div class="timer">
 			<div class="timer-display">
+				<p class="timer-time" id="timer-time" title="Time">Time</p>
 				<p class="timer-main" id="timer-main" title="To next">Main timer</p>
 				<p class="timer-sub" id="timer-sub" title="To end">Timer to end</p>
 			</div>
@@ -22,8 +23,9 @@
 				<button id="clear">Clear</button>
 				<label>Loop:</label>
 				<input type="checkbox" title="Loop" id="loop">
-				<!-- <label>Timer/Time:</label>
-				<input type="checkbox" title="Mode" id="mode"> -->
+				<label>Timer/Time:</label>
+				<input type="checkbox" title="Mode" id="displayMode">
+				<button id="editMode">Edit 📝</button>
 			</div>
 			<div class="timer-list sort-vertical" id="timer-list"></div>
 			<button class="row-add">+</button>
@@ -37,19 +39,27 @@
 	</div>
 	<template id="rowTemplate">
 		<div class="timer-row">
-			<input type="checkbox" class="row-ignore" title="Ignore">
-			<div class="row-handle">↕</div>
-			<button class="row-go">Go</button>
-			<input type="text" class="row-label" placeholder="Label">
-			<!-- <input type="date" class="row-date" title="date"> -->
-			<input type="number" min="0" class="row-hours" placeholder="h" title="hours">
-			<input type="number" min="0" class="row-minutes" placeholder="m" title="Minutes">
-			<input type="number" min="0" class="row-seconds" placeholder="s" title="Seconds">
-			<label>Time:</label>
-			<input type="checkbox" class="row-mode" title="Duration/Time mode">
-			<!-- <p class="row-timer">0:00:00</p> -->
-			<p class="row-timer">00</p>
-			<button class="row-remove">x</button>
+			<div class="row-section">
+				<div class="row-handle">↕</div>
+			</div>
+			<div class="row-section">
+				<div class="row-options">
+					<button class="row-go">Go</button>
+					<input type="checkbox" class="row-ignore" title="Ignore">
+					<p class="row-name"></p>
+					<p class="row-timer">00</p>
+				</div>
+				<div class="row-options">
+					<input type="text" class="row-label" placeholder="Label">
+					<!-- <input type="date" class="row-date" title="date"> -->
+					<input type="number" min="0" class="row-hours" placeholder="h" title="hours">
+					<input type="number" min="0" class="row-minutes" placeholder="m" title="Minutes">
+					<input type="number" min="0" class="row-seconds" placeholder="s" title="Seconds">
+					<label>Time:</label>
+					<input type="checkbox" class="row-mode" title="Duration/Time mode">
+					<button class="row-remove">x</button>
+				</div>
+			</div>
 		</div>
 	</template>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
