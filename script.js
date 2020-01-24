@@ -36,10 +36,10 @@ $(document).ready(function () {
 	$('#start').on('click', function () {
 		play = !play;
 		if (play) {
-			$(this).removeClass('true');
+			$(this).addClass('true');
 			runTimer();
 		} else {
-			$(this).addClass('true');
+			$(this).removeClass('true');
 			stopTimer();
 		}
 	});
@@ -224,7 +224,7 @@ function checkTimer() {
 		$('.timer-row').eq(row + force).addClass('highlight');
 		$('title').text(format(times[row] - now) + ' - ' + ($('.timer-row').eq(row + force).find('.row-label').val() || 'Label'));
 	} else {
-		stopTimer();
+		stopTimer(!loop);
 		if (loop) {
 			runTimer();
 		}
@@ -241,8 +241,10 @@ function stopTimer(full = true) {
 	$('#timer-sub').text('Timer to end');
 	$('title').text('Timer');
 	if (full) {
+		$('#start').removeClass('true');
 		force = 0;
 		pauseTime = false;
+		play = false;
 	}
 }
 

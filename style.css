@@ -117,6 +117,10 @@ button {
 
 .timer-controls button {
 	min-width: 40px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-origin: content-box;
+	background-position: center;
 }
 
 .timer-controls button:hover {
@@ -132,20 +136,23 @@ button {
 
 #start {
 	background-image: url('icons/play.png');
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-origin: content-box;
-	background-position: center;
 }
 #start.true {
 	background-image: url('icons/stop.png');
 }
 
+#pause {
+	background-image: url('icons/pause.png');
+}
+#pause.true {
+	background-color: var(--secondary-color);
+}
+
 #loop {
-	content: url('icons/noloop');
+	content: url('icons/noloop.png');
 }
 #loop.true {
-	content: url('icons/loop');
+	content: url('icons/loop.png');
 }
 
 /* ----------Timer List---------- */
