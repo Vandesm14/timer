@@ -4,11 +4,12 @@ var current = 0;
 var startTime;
 var row = 0;
 
-var force = 0;
+var play = false;
 var pauseTime = false;
 var loop = false;
 var display = false;
 var edit = true;
+var force = 0;
 
 var interval;
 
@@ -33,7 +34,14 @@ $(document).ready(function () {
 	});
 
 	$('#start').on('click', function () {
-		runTimer();
+		play = !play;
+		if (play) {
+			$(this).removeClass('true');
+			runTimer();
+		} else {
+			$(this).addClass('true');
+			stopTimer();
+		}
 	});
 	$('#stop').on('click', function () {
 		stopTimer();
@@ -46,11 +54,21 @@ $(document).ready(function () {
 			clearTimer();
 		}
 	});
-	$('#loop').on('change', function () {
-		loop = $(this).prop('checked');
+	$('#loop').on('click', function () {
+		loop = !loop;
+		if (loop) {
+			$(this).addClass('true');
+		} else {
+			$(this).removeClass('true');
+		}
 	});
-	$('#displayMode').on('change', function () {
-		display = $(this).prop('checked');
+	$('#displayMode').on('click', function () {
+		display = !display;
+		if (display) {
+			$(this).text('Time📅');
+		} else {
+			$(this).text('Timer⏱');
+		}
 	});
 	$('#editMode').on('click', function () {
 		edit = !edit;
