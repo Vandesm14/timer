@@ -17,12 +17,12 @@
 				<p class="timer-sub" id="timer-sub" title="To end">Timer to end</p>
 			</div>
 			<div class="timer-controls">
-				<button id="start" title="Start/Stop"></button>
-				<button id="pause" title="Pause"></button>
+				<button id="play" class="white-icon" title="Start/Stop"></button>
+				<button id="pause" class="white-icon" title="Pause"></button>
 				<button id="clear" title="Clear"></button>
-				<button id="loop" title="Loop"></button>
-				<button id="displayMode" title="Display Mode">Timer ⏱</button>
-				<button id="editMode" title="Mode">Edit 📝</button>
+				<button id="loop" class="white-icon" title="Loop"></button>
+				<button id="displayMode" class="white-icon" title="Display Mode">Timer</button>
+				<button id="editMode" class="white-icon" title="Mode">Edit</button>
 			</div>
 			<div class="timer-list sort-vertical" id="timer-list"></div>
 			<button class="row-add">+</button>
@@ -37,23 +37,21 @@
 	<template id="rowTemplate">
 		<div class="timer-row">
 			<div class="row-section">
-				<div class="row-handle">↕</div>
+				<div class="row-handle">⠿</div>
 			</div>
 			<div class="row-section">
-				<div class="row-options">
-					<button class="row-go">Go</button>
-					<input type="checkbox" class="row-ignore" title="Ignore">
-					<p class="row-name"></p>
+				<div class="row-options row-play">
+					<button class="row-go white-icon" title="Go"></button>
+					<button class="row-ignore" title="Ignore"></button>
+					<input type="text" class="row-label" placeholder="Label" title="Label">
 					<p class="row-timer">00</p>
 				</div>
-				<div class="row-options">
-					<input type="text" class="row-label" placeholder="Label">
-					<!-- <input type="date" class="row-date" title="date"> -->
-					<input type="number" min="0" class="row-hours" placeholder="h" title="hours">
+				<div class="row-options row-edit">
+					<input type="date" class="row-date" title="date">
+					<input type="number" min="0" class="row-hours" placeholder="h" title="Hurs">
 					<input type="number" min="0" class="row-minutes" placeholder="m" title="Minutes">
 					<input type="number" min="0" class="row-seconds" placeholder="s" title="Seconds">
-					<label>Time:</label>
-					<input type="checkbox" class="row-mode" title="Duration/Time mode">
+					<button class="row-mode white-icon" title="Duration/Time mode"></button>
 					<button class="row-remove">x</button>
 				</div>
 			</div>

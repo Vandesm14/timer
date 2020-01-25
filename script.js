@@ -33,7 +33,7 @@ $(document).ready(function () {
 		calcListeners();
 	});
 
-	$('#start').on('click', function () {
+	$('#play').on('click', function () {
 		play = !play;
 		if (play) {
 			$(this).addClass('true');
@@ -65,19 +65,23 @@ $(document).ready(function () {
 	$('#displayMode').on('click', function () {
 		display = !display;
 		if (display) {
-			$(this).text('Time📅');
+			$(this).text('Time');
+			$(this).addClass('true');
 		} else {
-			$(this).text('Timer⏱');
+			$(this).text('Timer');
+			$(this).removeClass('true');
 		}
 	});
 	$('#editMode').on('click', function () {
 		edit = !edit;
 		if (edit) {
-			$(this).text('Edit 📝');
+			$(this).text('Edit');
 			$('#timer-list').removeClass('play');
+			$(this).removeClass('true');
 		} else {
-			$(this).text('Play ▶');
+			$(this).text('Play');
 			$('#timer-list').addClass('play');
+			$(this).addClass('true');
 		}
 	});
 
@@ -112,19 +116,31 @@ function calcListeners() {
 			$('#timer-list .timer-row').eq(index - 1 > -1 ? index - 1 : 0).find('.' + name).focus().select();
 		}
 	});
-	$('.row-go').off('click');
-	$('.row-go').on('click', function () {
+
+	$('#timer-list .row-go').off('click');
+	$('#timer-list .row-go').on('click', function () {
 		force = $(this).closest('.timer-row').index();
 		runTimer();
 	});
-	$('.row-label').off('blur');
-	$('.row-label').on('blur', function () {
+	$('#timer-list .row-ignore').off('click');
+	$('#timer-list .row-ignore').on('click', function () {
+		$(this).toggleClass('true');
+		calcTimer();
+	});
+
+	$('#timer-list .row-label').off('blur');
+	$('#timer-list .row-label').on('blur', function () {
 		if ($(this).text() === '') {
 			$(this).text('Label');
 		}
 	});
-	$('.row-remove').off('click');
-	$('.row-remove').on('click', function () {
+	$('#timer-list .row-mode').off('click');
+	$('#timer-list .row-mode').on('click', function () {
+		$(this).toggleClass('true');
+		calcTimer();
+	});
+	$('#timer-list .row-remove').off('click');
+	$('#timer-list .row-remove').on('click', function () {
 		$(this).closest('.timer-row').remove();
 		calcTimer();
 	});
@@ -140,8 +156,8 @@ function calcTimer() {
 			h: +$(this).find('.row-hours').val(),
 			m: +$(this).find('.row-minutes').val(),
 			s: +$(this).find('.row-seconds').val(),
-			mode: $(this).find('.row-mode').prop('checked'),
-			ignore: $(this).find('.row-ignore').prop('checked')
+			mode: $(this).find('.row-mode').hasClass('true'),
+			ignore: $(this).find('.row-ignore').hasClass('true')
 		};
 		timer.push(obj);
 	});
@@ -155,6 +171,8 @@ function runTimer() {
 	} else {
 		startTime = new Date();
 	}
+	$('#play').addClass('true');
+	play = true;
 	updateTimer();
 	checkTimer();
 	interval = setInterval(checkTimer, 1000);
@@ -212,7 +230,7 @@ function checkTimer() {
 			$('.timer-row').eq(i).addClass('done');
 		}
 		$('.timer-row.done').find('.row-timer').text('00');
-		$('.row-ignore:checked').closest('.timer-row').addClass('done');
+		$('#timer-list .row-ignore:checked').closest('.timer-row').addClass('done');
 		$('.timer-row').slice(force + row).each(function(i){
 			if (display) {
 				$(this).not('.done').find('.row-timer').text(timer[i + row].date.toLocaleTimeString());
@@ -235,13 +253,13 @@ function stopTimer(full = true) {
 	clearInterval(interval);
 	$('.highlight').removeClass('highlight');
 	$('.done').removeClass('done');
-	$('.row-timer').text('00');
+	$('#timer-list .row-timer').text('00');
 	$('#timer-time').text('Time');
 	$('#timer-main').text('Main timer');
 	$('#timer-sub').text('Timer to end');
 	$('title').text('Timer');
 	if (full) {
-		$('#start').removeClass('true');
+		$('#play').removeClass('true');
 		force = 0;
 		pauseTime = false;
 		play = false;
@@ -251,6 +269,8 @@ function stopTimer(full = true) {
 function pauseTimer() {
 	clearInterval(interval);
 	pauseTime = new Date();
+	$('#play').removeClass('true');
+	play = false;
 }
 
 function clearTimer() {
