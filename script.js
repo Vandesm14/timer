@@ -71,6 +71,7 @@ $(document).ready(function () {
 			$(this).text('Timer');
 			$(this).removeClass('true');
 		}
+		checkTimer();
 	});
 	$('#editMode').on('click', function () {
 		edit = !edit;
