@@ -157,7 +157,7 @@ function calcTimer() {
 			h: +$(this).find('.row-hours').val(),
 			m: +$(this).find('.row-minutes').val(),
 			s: +$(this).find('.row-seconds').val(),
-			date: +$(this).find('.row-date').val() || 0,
+			rawDate: $(this).find('.row-date').val(),
 			mode: $(this).find('.row-mode').hasClass('true'),
 			ignore: $(this).find('.row-ignore').hasClass('true')
 		};
@@ -189,9 +189,16 @@ function updateTimer() {
 		if (obj.mode) { // true: time, false: duration
 			obj.time = new Date(lastTime);
 			obj.time.setHours(obj.h, obj.m, obj.s, 0);
-			// if (obj.time < startTime) {
-			// 	obj.time.setTime(obj.time.getTime() + D);
-			// }
+			if (obj.rawDate) {
+				obj.date = obj.rawDate.replace(/-0(?=[0-9]-)/, '-');
+				obj.date = new Date(obj.date);
+			}
+			if (obj.rawDate && new Date(obj.date).setHours(obj.h, obj.m, obj.s, 0) > obj.time) {
+				obj.time.setFullYear(obj.date.getFullYear(), obj.date.getMonth(), obj.date.getDate());
+			}
+			if (!obj.rawDate && obj.time < startTime) {
+				obj.time.setTime(obj.time.getTime() + D);
+			}
 		} else {
 			obj.time = new Date(lastTime);
 			obj.time.setTime(obj.time.getTime() + hms(obj.h, obj.m, obj.s));
@@ -201,6 +208,9 @@ function updateTimer() {
 		}
 	}
 	times = slice.map(el => el.time);
+	if (play) {
+		checkTimer();
+	}
 }
 
 function checkTimer() {
@@ -294,12 +304,14 @@ function createSortable(el) {
 }
 
 function format(time) {
-	let h = Math.floor(time / H);
+	let w = Math.floor(time / (D * 7));
+	let d = Math.floor(time / D);
+	let h = Math.floor(time / H) % 24;
 	let m = Math.floor(time / M) % 60;
 	let s = Math.round(time / S) % 60;
 	s = s < 10 ? '0' + s : s;
 	m = m < 10 ? '0' + m : m;
-	return (+h ? h + ':' : '') + (+m || +h ? m + ':' : '') + s;
+	return (+d ? d + 'd ' : '') + (+h ? h + ':' : '') + (+m || +h ? m + ':' : '') + s;
 }
 
 function hms(h, m, s) {
