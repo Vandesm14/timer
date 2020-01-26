@@ -47,7 +47,11 @@ $(document).ready(function () {
 		stopTimer(true);
 	});
 	$('#pause').on('click', function () {
-		pauseTimer();
+		if (pauseTime) {
+			runTimer();
+		} else {
+			pauseTimer();
+		}
 	});
 	$('#next').on('click', function () {
 		force = row + force + 1;
@@ -177,6 +181,7 @@ function runTimer() {
 	} else {
 		startTime = new Date();
 	}
+	$('#pause').removeClass('true');
 	$('#play').addClass('true');
 	play = true;
 	updateTimer();
@@ -287,6 +292,7 @@ function pauseTimer() {
 	clearInterval(interval);
 	pauseTime = new Date();
 	$('#play').removeClass('true');
+	$('#pause').addClass('true');
 	play = false;
 }
 

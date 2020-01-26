@@ -151,11 +151,10 @@ button {
 }
 
 #loop {
-  background-image: url('icons/noloop.png');
+  background-image: url('icons/loop.png');
   opacity: 0.4;
 }
 #loop.true {
-  background-image: url('icons/loop.png');
   opacity: 1;
 }
 
