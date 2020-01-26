@@ -157,6 +157,7 @@ function calcTimer() {
 			h: +$(this).find('.row-hours').val(),
 			m: +$(this).find('.row-minutes').val(),
 			s: +$(this).find('.row-seconds').val(),
+			date: +$(this).find('.row-date').val() || 0,
 			mode: $(this).find('.row-mode').hasClass('true'),
 			ignore: $(this).find('.row-ignore').hasClass('true')
 		};
@@ -183,23 +184,23 @@ function updateTimer() {
 	let slice = timer.slice(force);
 	pauseTime = false;
 	for (let i in slice) {
-		let lastTime = +i ? slice[i - 1].date : startTime;
+		let lastTime = +i ? slice[i - 1].time : startTime;
 		let obj = slice[i];
 		if (obj.mode) { // true: time, false: duration
-			obj.date = new Date(lastTime);
-			obj.date.setHours(obj.h, obj.m, obj.s, 0);
-			// if (obj.date < startTime) {
-			// 	obj.date.setTime(obj.date.getTime() + D);
+			obj.time = new Date(lastTime);
+			obj.time.setHours(obj.h, obj.m, obj.s, 0);
+			// if (obj.time < startTime) {
+			// 	obj.time.setTime(obj.time.getTime() + D);
 			// }
 		} else {
-			obj.date = new Date(lastTime);
-			obj.date.setTime(obj.date.getTime() + hms(obj.h, obj.m, obj.s));
+			obj.time = new Date(lastTime);
+			obj.time.setTime(obj.time.getTime() + hms(obj.h, obj.m, obj.s));
 		}
 		if (timer[i].ignore) {
-			obj.date = new Date(lastTime);
+			obj.time = new Date(lastTime);
 		}
 	}
-	times = slice.map(el => el.date);
+	times = slice.map(el => el.time);
 }
 
 function checkTimer() {
@@ -234,7 +235,7 @@ function checkTimer() {
 		$('#timer-list .row-ignore:checked').closest('.timer-row').addClass('done');
 		$('.timer-row').slice(force + row).each(function(i){
 			if (display) {
-				$(this).not('.done').find('.row-timer').text(timer[i + row].date.toLocaleTimeString());
+				$(this).not('.done').find('.row-timer').text(timer[i + row].time.toLocaleTimeString());
 			} else {
 				$(this).not('.done').find('.row-timer').text(format(times[i + row] - now));
 			}
