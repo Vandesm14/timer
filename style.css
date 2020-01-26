@@ -39,7 +39,7 @@ a, a:visited {
 
 .app {
   display: flex;
-  overflow-x: hidden;
+	overflow-x: hidden;
   flex-direction: column;
 }
 
@@ -135,7 +135,6 @@ button {
 #play {
   background-image: url('icons/play.png');
 }
-
 #play.true {
   background-image: url('icons/stop.png');
 }
@@ -143,19 +142,18 @@ button {
 #pause {
   background-image: url('icons/pause.png');
 }
-
 #pause.true {
   background-color: var(--secondary-color);
 }
 
-#clear {
-  background-image: url('icons/clear.png');
+#next {
+  background-image: url('icons/noloop.png');
 }
 
 #loop {
   background-image: url('icons/noloop.png');
+  opacity: 0.4;
 }
-
 #loop.true {
   background-image: url('icons/loop.png');
   opacity: 1;
@@ -166,7 +164,6 @@ button {
   background-image: url('icons/timer.png');
   background-position: 212% 0;
 }
-
 #displayMode.true {
   background-image: url('icons/clock2.png');
   background-position: 207% 0;
@@ -177,10 +174,13 @@ button {
   background-image: url('icons/edit2.png');
   background-position: 340% 0;
 }
-
 #editMode.true {
   background-image: url('icons/play.png');
   background-position: 348% 0;
+}
+
+#clear {
+  background-image: url('icons/clear.png');
 }
 
 /* ----------Timer List---------- */
@@ -197,7 +197,7 @@ button {
   flex-direction: row;
   margin: 8px 0;
   padding: 4px 2px;
-  max-height: 35px;
+  /* max-height: 35px; */
   border-radius: 6px;
   background-color: #ddd1ff;
   box-shadow: 0 1px 6px #00000055;
@@ -206,15 +206,17 @@ button {
 
   user-select: none;
 }
-
 .timer-row.done {
   background-color: silver;
   opacity: 0.6;
   filter: grayscale(1);
 }
-
 .timer-row.highlight {
   background-color: var(--secondary-color);
+}
+
+#timer-list.play .timer-row {
+  padding: 2px 0;
 }
 
 .timer-row button {
@@ -257,12 +259,13 @@ button {
 }
 
 .row-controls {
-  margin-top: -2px;
+  max-width: 388px;
   transition: margin-top 200ms ease;
 }
 
 #timer-list.play .row-controls {
-  margin-top: -42px;
+  margin-top: -40px;
+  max-width: max-content;
 }
 
 .row-handle {
@@ -300,11 +303,12 @@ button {
 
 .row-ignore {
   background-image: url('icons/ignore.png');
+  filter: grayscale(1);
 }
 
 .row-ignore.true {
   background-image: url('icons/ignore-true.png');
-  opacity: 1;
+  filter: grayscale(0);
 }
 
 .row-label {

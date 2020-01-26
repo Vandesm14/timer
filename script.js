@@ -17,7 +17,7 @@ var S = 1000;
 var M = 60 * S;
 var H = 60 * M;
 
-var D = H*24;
+var D = H * 24;
 
 $(document).ready(function () {
 	calcListeners();
@@ -44,15 +44,14 @@ $(document).ready(function () {
 		}
 	});
 	$('#stop').on('click', function () {
-		stopTimer();
+		stopTimer(true);
 	});
 	$('#pause').on('click', function () {
 		pauseTimer();
 	});
-	$('#clear').on('click', function () {
-		if (confirm('Are you sure you want to clear the timer?')) {
-			clearTimer();
-		}
+	$('#next').on('click', function () {
+		force = row + force + 1;
+		runTimer();
 	});
 	$('#loop').on('click', function () {
 		loop = !loop;
@@ -83,6 +82,11 @@ $(document).ready(function () {
 			$(this).text('Play');
 			$('#timer-list').addClass('play');
 			$(this).addClass('true');
+		}
+	});
+	$('#clear').on('click', function () {
+		if (confirm('Are you sure you want to clear the timer?')) {
+			clearTimer();
 		}
 	});
 
@@ -203,11 +207,12 @@ function updateTimer() {
 			obj.time = new Date(lastTime);
 			obj.time.setTime(obj.time.getTime() + hms(obj.h, obj.m, obj.s));
 		}
-		if (timer[i].ignore) {
+		if (slice[i].ignore) {
 			obj.time = new Date(lastTime);
 		}
 	}
 	times = slice.map(el => el.time);
+
 	if (play) {
 		checkTimer();
 	}
@@ -242,8 +247,8 @@ function checkTimer() {
 			$('.timer-row').eq(i).addClass('done');
 		}
 		$('.timer-row.done').find('.row-timer').text('00');
-		$('#timer-list .row-ignore:checked').closest('.timer-row').addClass('done');
-		$('.timer-row').slice(force + row).each(function(i){
+		$('#timer-list .row-ignore.true').closest('.timer-row').addClass('done');
+		$('.timer-row').slice(row + force).each(function (i) {
 			if (display) {
 				$(this).not('.done').find('.row-timer').text(timer[i + row].time.toLocaleTimeString());
 			} else {
